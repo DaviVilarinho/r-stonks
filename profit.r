@@ -23,7 +23,7 @@ total_profit <- function(fcfs,
                          price,
                          pe)
 {
-    return   (((sum(fcfs)+fcf[length(fcf)]*pe)  # fcf sum + price considering last pe
+    return   (((sum(fcfs)+fcfs[length(fcfs)]*pe)  # fcf sum + price considering last pe
                 /price)
                 ^(1/legth(fcfs)))               # returning a annual coumpound return
 }
