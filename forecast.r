@@ -13,7 +13,7 @@ forecast <- function(first_fcf,                 # basic free-cash-flow
                      growth,                    # growth (1+%, like 1.075 = 7.5%)
                      time,                      # in your units, usually years
                      accelerator = 1,           # growth of the growth, can be used to reduce if < 1 (0.94 = -6%/year), 1 default, don't xlr8ed.
-                     wacc = 1)                  # weighted average cost capital IF YOU WANT ALMOST A GGM MODEL (ex: 1.075 = 7.5%)
+                     wacc = 1)                  # weighted average cost capital IF YOU WANT DISCOUNT CASH FLOWS MODEL
 {
     fcfs <- c(first_fcf)
 
@@ -29,3 +29,25 @@ forecast <- function(first_fcf,                 # basic free-cash-flow
 ################################################################################
 # now yes the GGM '-'
 ## return "fair enterprise value"
+
+ggm_forecast <- function(first_fcf,
+                         growth,                    
+                         time,                      
+                         accelerator = 1,           
+                         wacc = 1)                  
+{
+    if (wacc != 1)
+    {
+        fcf_series <- forecast(first_fcf, growth, time, accelerator, wacc) # recycle
+    
+        final_growth <- growth^time * accelerator^time
+        next_fcf   <- fcf_series[length(fcf_series)] * final_growth / wacc
+
+        # Perp = d_(+1)/(r-g)
+        perpetuity <- next_fcf/(1-wacc - (1-final_growth))
+
+        return (perpetuity + sum(fcf_series))
+    }
+    else
+        return(-1)
+}
