@@ -33,12 +33,17 @@ total_profit <- function(fcfs,
 real_profit  <- function(fcfs, 
                          price,
                          pe,
-                         wacc)    # Weighted Average Cost of Capital, kinda 1.05 = 5%
+                         wacc,  # Weighted Average Cost of Capital, kinda 1.05 = 5%
+                         annual=FALSE)    
 {
     time           <- length(fcfs)                           # fcf count
     nominal_return <- total_profit(fcfs, price, pe)          # getting nominal return
 
     # now, returning the profit considering your capital cost
-    return ((nominal_return^time)/
+    if (annual == FALSE)
+        return ((nominal_return^time)/
             (wacc^time)) 
+    else
+        return (((nominal_return^time)/
+            (wacc^time))^(1/time))
 }
