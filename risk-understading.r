@@ -4,10 +4,10 @@
 safety_margin <- function(fcfs,
                           price,
                           pe,
-                          wacc, 
-                          real=TRUE)
+                          wacc)
 {
     foo <- 1/3
+    time <- length(fcfs)
 
     price_pe_table <- c()
 
@@ -16,17 +16,15 @@ safety_margin <- function(fcfs,
         line <- c()
         for (j in 1:3)
         {
-            if (real)
-                line <- c(line, real_profit(fcfs,
-                                            price*(foo+i/3),
-                                            pe*(foo*j/3),
-                                            wacc,
-                                            F))
-            else
-                line <- c(line, total_profit(fcfs,
-                                             price*(foo+i/3),
-                                             pe*(foo+j/3)))
+            max_gain_year <- total_profit(fcfs,
+                                          price*(foo+i/3),
+                                          pe*(foo+j/3))
+
+            max_gain_year <- (max_gain_year^(time))/(wacc^(time-1))
+
+            line <- c(line, max_gain_year)
         }
+
         price_pe_table <- rbind(price_pe_table, line)    
     }
 
