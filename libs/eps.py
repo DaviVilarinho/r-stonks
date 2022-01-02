@@ -10,12 +10,17 @@ def weighted_eps_sum(eps_series, weighted_capital_cost):
     return final_sum
 
 
-def calc_eps_sum(starting_eps, eps_growth_series):
-    eps_sum = 0
+def calc_eps(starting_eps, eps_growth_series):
+    epses = []
     geometric_growth_sum = 1
 
     for growth in eps_growth_series:
         geometric_growth_sum *= growth
-        eps_sum += (starting_eps * geometric_growth_sum)
+        epses += [starting_eps * geometric_growth_sum]
 
-    return eps_sum
+    return epses
+
+def weighted_eps_growth_sum(starting_eps, eps_growth_series, wacc):
+    return weighted_eps_sum(calc_eps(starting_eps, eps_growth_series), wacc)
+
+
